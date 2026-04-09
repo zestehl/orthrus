@@ -19,35 +19,71 @@ Agathos is the immune system for Hermes Agent — a background daemon that detec
 
 - Python 3.9+
 - Hermes Agent installed and configured
+- [uv](https://docs.astral.sh/uv/) package manager
 
-### Install from Source
+### Install uv (if not already installed)
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+# or via Homebrew
+brew install uv
+```
+
+### Install Agathos
 
 ```bash
 git clone https://github.com/zestehl/agathos.git
 cd agathos
-pip install -e .
-```
 
-### Install in Development Mode
+# Create virtual environment and install
+uv venv
+uv pip install -e ".[dev]"
 
-```bash
-pip install -e ".[dev]"
+# Or use the locked dependencies
+uv pip sync uv.lock
+uv pip install -e .
 ```
 
 ## Quick Start
 
 ```bash
-# Interactive setup
-agathos-setup
+# Using uv run (no need to activate venv)
+uv run agathos-setup
 
 # Or start the daemon directly
-agathos
+uv run agathos
 
 # Check status
-agathos status
+uv run agathos status
 
 # Run audit for stale references
-agathos-audit
+uv run agathos-audit
+
+# Or activate the venv and use directly
+source .venv/bin/activate
+agathos-setup
+```
+
+## Development Commands
+
+```bash
+# Install dev dependencies
+uv pip install -e ".[dev]"
+
+# Run linting
+uv run ruff check src/agathos
+
+# Run type checking
+uv run mypy src/agathos
+
+# Run tests
+uv run pytest tests/
+
+# Run POSIX compliance checks
+uv run python tests/run_posix_compliance_check.py
+
+# Run audit for stale references
+uv run agathos-audit --strict
 ```
 
 ## Configuration
@@ -111,10 +147,10 @@ When installed alongside Hermes Agent, Agathos:
 
 ```bash
 # Run POSIX compliance checks
-python tests/run_posix_compliance_check.py
+uv run python tests/run_posix_compliance_check.py
 
 # Run audit for stale references
-python -m agathos.argus_audit --strict
+uv run agathos-audit --strict
 ```
 
 ## CLI Reference

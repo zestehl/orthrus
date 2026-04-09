@@ -25,9 +25,11 @@ classifiers = [
     "Topic :: System :: Monitoring",
 ]
 dependencies = [
-    "hermes-agent",  # Core dependency
     "pyyaml>=6.0",
 ]
+
+# Hermes agent is provided by the host environment or installed separately
+# See: https://github.com/NousResearch/hermes-agent
 
 [project.optional-dependencies]
 dev = [
@@ -48,6 +50,14 @@ agathos = "agathos.integration:HermesPlugin"
 [tool.hatch.build.targets.wheel]
 packages = ["src/agathos"]
 
+# === UV CONFIGURATION ===
+[tool.uv]
+python-preference = "only-system"  # Use system Python
+
+[tool.uv.pip]
+annotation-style = "line"
+
+# === RUFF CONFIGURATION ===
 [tool.ruff]
 line-length = 100
 target-version = "py39"
@@ -55,6 +65,7 @@ target-version = "py39"
 [tool.ruff.lint]
 select = ["E", "F", "W", "I"]
 
+# === MYPY CONFIGURATION ===
 [tool.mypy]
 python_version = "3.9"
 warn_return_any = true
