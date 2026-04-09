@@ -1,25 +1,61 @@
-![AGATHOS Logo](assets/agathos_logo.jpg)
+![AGATHOS Logo](https://raw.githubusercontent.com/zestehl/agathos/main/assets/agathos_logo.jpg)
 
-# AGATHOS - Agent Guardian & Health Oversight System
+# Agathos — Agent Guardian & Health Oversight System
 
-AGATHOS is the immune system for Hermes — a background daemon that detects entropy in agent sessions and takes corrective action before quality degrades.
+Agathos is the immune system for Hermes Agent — a background daemon that detects entropy in agent sessions and takes corrective action before quality degrades.
 
 ## What It Does
 
 - **Session Monitoring** — Watches cron jobs, delegate tasks, and manual sessions
-- **Entropy Detection** — Catches repeat tool calls, stuck loops, and wasted cycles
+- **Entropy Detection** — Catches repeat tool calls, stuck loops, and wasted cycles  
 - **Quality Enforcement** — Restarts or kills sessions that fall below ML data quality thresholds
 - **Cost Protection** — Alerts on budget overruns and circuit-breaks failing providers
 - **Action Execution** — Injects corrective prompts, restarts, or terminates as needed
 - **Notification Fan-out** — Sends alerts via Telegram, Discord, Slack, or webhooks
 
-AGATHOS integrates directly with Hermes internals — using `cron.jobs` for discovery, `SessionDB` for state, and `hermes_cli.config` for user overrides. It respects the existing structure without duplicating logic.
+## Installation
+
+### Prerequisites
+
+- Python 3.9+
+- Hermes Agent installed and configured
+
+### Install from Source
+
+```bash
+git clone https://github.com/zestehl/agathos.git
+cd agathos
+pip install -e .
+```
+
+### Install in Development Mode
+
+```bash
+pip install -e ".[dev]"
+```
+
+## Quick Start
+
+```bash
+# Interactive setup
+agathos-setup
+
+# Or start the daemon directly
+agathos
+
+# Check status
+agathos status
+
+# Run audit for stale references
+agathos-audit
+```
 
 ## Configuration
 
-All advanced features default to **OFF**. Enable only what you need:
+Agathos creates its config directory at `~/.hermes/agathos/`:
 
 ```yaml
+# ~/.hermes/agathos/config.yaml
 agathos:
   # Core (always on)
   poll_interval: 30
@@ -35,8 +71,73 @@ agathos:
     enabled: false
 ```
 
-Interactive setup: `agathos setup`
+## Hermes Integration
+
+When installed alongside Hermes Agent, Agathos:
+- Auto-registers via entry points (`hermes.plugins`)
+- Hooks into session lifecycle (start/end)
+- Exports health checks and metrics
+- Falls back to subprocess mode if Hermes internals unavailable
+
+## Architecture
+
+```
+┌─────────────────────────────────────────┐
+│           Hermes Agent                  │
+│  ┌─────────────────────────────────┐    │
+│  │  Agathos Plugin (optional)    │    │
+│  │  - Session hooks                │    │
+│  │  - Health checks              │    │
+│  │  - Metrics export               │    │
+│  └─────────────────────────────────┘    │
+└─────────────────────────────────────────┘
+                    │
+                    │ (subprocess / internal)
+                    ▼
+┌─────────────────────────────────────────┐
+│           Agathos Daemon                │
+│  ┌─────────┐ ┌─────────┐ ┌──────────┐ │
+│  │ Entropy │ │ Actions │ │  Audit   │ │
+│  │   Detection   Execution    Trail  │ │
+│  └─────────┘ └─────────┘ └──────────┘ │
+│  ┌─────────┐ ┌─────────┐ ┌──────────┐ │
+│  │ Circuit │ │  Cost   │ │ Notifications │
+│  │ Breaker │ │ Monitor │ │           │ │
+│  └─────────┘ └─────────┘ └──────────┘ │
+└─────────────────────────────────────────┘
+```
+
+## Testing
+
+```bash
+# Run POSIX compliance checks
+python tests/run_posix_compliance_check.py
+
+# Run audit for stale references
+python -m agathos.argus_audit --strict
+```
+
+## CLI Reference
+
+| Command | Description |
+|---------|-------------|
+| `agathos` | Start daemon (foreground) |
+| `agathos status` | Check daemon status |
+| `agathos start` | Start daemon with service management |
+| `agathos stop` | Stop daemon |
+| `agathos setup` | Interactive configuration |
+| `agathos-audit` | Audit for stale argus references |
+
+## Documentation
+
+- [Integration Analysis](AGATHOS-HERMES-INTEGRATION-ANALYSIS.md)
+- [POSIX Compliance](POSIX_COMPLIANCE_AUDIT.md)
+- [Venv Setup](VENV_SETUP.md)
+
+## License
+
+MIT
 
 ---
 
-**Good code defends itself. AGATHOS ensures your agents do too.**
+**Good code defends itself. Agathos ensures your agents do too.**
