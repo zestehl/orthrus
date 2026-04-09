@@ -40,7 +40,7 @@ uv venv
 uv pip install -e ".[dev]"
 
 # Or use the locked dependencies
-uv pip sync uv.lock
+uv pip sync requirements-dev.lock
 uv pip install -e .
 ```
 

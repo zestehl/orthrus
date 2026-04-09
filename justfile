@@ -68,11 +68,12 @@ clean:
     find . -type d -name __pycache__ -exec rm -rf {} +
     find . -type f -name "*.pyc" -delete
 
-# Update uv.lock
+# Update lock files
 lock:
-    uv pip freeze > uv.lock
+    uv pip compile pyproject.toml -o requirements.lock
+    uv pip compile pyproject.toml --extra dev -o requirements-dev.lock
 
-# Sync dependencies from uv.lock
+# Sync dependencies from lock files
 sync:
-    uv pip sync uv.lock
+    uv pip sync requirements-dev.lock
     uv pip install -e .
