@@ -77,3 +77,17 @@ class TransformersBackend(EmbeddingBackend): ...  # GPU when available
 - Unit: Backend produces expected dimensions
 - Integration: Async pipeline processes 1000 texts
 - Benchmark: Latency and throughput by backend
+
+## Implementation
+
+**Files:**
+- `src/orthrus/embedding/_protocol.py` — EmbeddingBackend Protocol
+- `src/orthrus/embedding/_transformers.py` — TransformersBackend (GPU when available)
+- `src/orthrus/embedding/_worker.py` — EmbeddingWorker (async batch processing)
+
+**Status:**
+- `TransformersBackend` — implemented
+- `OnnxBackend` — **NOT YET IMPLEMENTED** (CPU quantized per spec)
+- `MLXBackend` — **NOT YET IMPLEMENTED** (Apple Silicon GPU)
+
+**Tests:** `tests/embedding/` exists with test_transformers.py, test_worker.py

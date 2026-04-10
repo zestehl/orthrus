@@ -1,7 +1,7 @@
 # Module: search
 
 ---
-status: not-started
+status: implemented
 priority: P1
 ---
 
@@ -93,3 +93,20 @@ orthrus search --mode hybrid --filter success=true
 - Unit: Cosine similarity correctness
 - Integration: Search returns expected results
 - Benchmark: Latency vs dataset size
+
+## Implementation
+
+**Files:**
+- `src/orthrus/search/_manager.py` — SearchManager, SearchQuery, SearchResult, SearchError
+- `src/orthrus/search/_text.py` — TextSearchManager (BM25), BM25Indexer
+- `src/orthrus/search/_vector.py` — VectorSearchManager (Annoy), VectorIndexer
+
+**Architecture:**
+- `SearchManager` is the coordinator — combines text and vector search
+- `TextSearchManager` — BM25 ranking over `query_text`, `response_text`, `error_message` fields
+- `VectorSearchManager` — Annoy approximate nearest neighbor index, cosine similarity
+- Hybrid mode: reciprocal rank fusion (RRF) combining text + vector scores
+
+**Status:**
+- All spec interfaces implemented per `src/orthrus/search/__init__.py`
+- Tests: **NOT YET WRITTEN** — `tests/search/` does not exist
