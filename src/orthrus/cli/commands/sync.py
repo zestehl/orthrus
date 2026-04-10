@@ -89,7 +89,7 @@ def cmd_sync(
         raise typer.Exit(code=1)
 
 
-def _fmt_bytes(n: int) -> str:
+def _fmt_bytes(n: float) -> str:
     """Format bytes as human-readable string."""
     for unit in ("B", "KB", "MB", "GB", "TB"):
         if abs(n) < 1024:

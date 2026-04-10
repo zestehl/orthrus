@@ -162,11 +162,9 @@ Create `~/Library/LaunchAgents/com.orthrus.capture.plist`:
     <string>com.orthrus.capture</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/zestehl/Projects/orthrus/.venv/bin/python</string>
-        <string>-m</string>
-        <string>orthrus.cli</string>
-        <string> capture</string>
-        <string>enable</string>
+        <string>/Users/zestehl/Projects/orthrus/.venv/bin/orthrus</string>
+        <string>capture</string>
+        <string>run</string>
     </array>
     <key>RunAtLoad</key>
     <true/>

@@ -7,12 +7,13 @@ from pathlib import Path
 
 import structlog
 
-from orthrus.config._models import SyncConfig, SyncTarget as SyncTargetConfig
+from orthrus.config._models import SyncConfig
+from orthrus.config._models import SyncTarget as SyncTargetConfig
+from orthrus.storage._paths import StoragePaths
 from orthrus.sync._models import SyncResult, SyncTarget
 from orthrus.sync.targets._local import LocalTarget
 from orthrus.sync.targets._rsync import RsyncTarget
 from orthrus.sync.targets._s3 import S3Target
-from orthrus.storage._paths import StoragePaths
 
 logger = structlog.get_logger(__name__)
 

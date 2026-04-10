@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 import asyncio
+import signal
+import threading
 from typing import Annotated, Any
 
+import structlog
 import typer
 import yaml
 
@@ -165,3 +168,58 @@ def _set_capture_enabled(
 
     state = "[green]enabled[/green]" if enable else "[red]disabled[/red]"
     print_success(f"Capture {state} — saved to [dim]{target}[/dim]")
+
+
+@capture_app.command("run")
+def cmd_run() -> None:
+    """Start the capture daemon (runs until SIGTERM/SIGINT)."""
+    logger = structlog.get_logger(__name__)
+
+    cfg = require_config()
+    if not cfg.capture.enabled:
+        console.print("[red]Capture is disabled. Run 'orthrus capture enable' first.[/red]")
+        raise typer.Exit(code=1)
+
+    from orthrus.capture import CaptureManager
+    from orthrus.storage import StorageManager, StoragePaths
+
+    storage = StorageManager(cfg.storage, StoragePaths.resolve(cfg.paths))
+    manager = CaptureManager(
+        config=cfg.capture,
+        storage=storage,
+        embedding=None,  # CLI mode: no async embedding
+        capture_profile=cfg.profile.value,
+        resource_profile=cfg.profile,
+    )
+
+    shutdown_event = threading.Event()
+
+    def _sigterm_handler(signum: int, frame: object) -> None:
+        logger.info("sigterm_received", signal=signum)
+        shutdown_event.set()
+
+    # Install signal handlers on the main thread
+    signal.signal(signal.SIGTERM, _sigterm_handler)
+    signal.signal(signal.SIGINT, _sigterm_handler)
+
+    async def _run() -> None:
+        await manager.start()
+        try:
+            while not shutdown_event.is_set():
+                await asyncio.sleep(1)
+        finally:
+            await manager.shutdown(timeout_seconds=30.0)
+
+    console.print("[dim]Orthrus capture daemon running. PID: "
+                 f"{threading.main_thread().ident}[/dim]")
+    console.print("[dim]Send SIGTERM or SIGINT to stop gracefully.[/dim]")
+
+    try:
+        asyncio.run(_run())
+    except KeyboardInterrupt:
+        logger.info("sigint_received")
+    except Exception as exc:
+        logger.error("capture_daemon_error", error=str(exc), exc_info=True)
+        raise typer.Exit(code=1) from exc
+
+    console.print("[dim]Capture daemon stopped.[/dim]")

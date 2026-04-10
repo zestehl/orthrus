@@ -6,8 +6,8 @@ from pathlib import Path
 
 import structlog
 
-from orthrus.sync.targets._base import BaseSyncTarget
 from orthrus.sync._models import SyncError
+from orthrus.sync.targets._base import BaseSyncTarget
 
 logger = structlog.get_logger(__name__)
 
