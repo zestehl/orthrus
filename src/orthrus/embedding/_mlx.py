@@ -125,8 +125,20 @@ def _mx_mean_pool(
     attention_mask: Any,
     padding_side: str = "right",
 ) -> list[list[float]]:
-    """Mean pool last hidden state over token dimension (MLX version)."""
+    """Mean pool last hidden state over token dimension (MLX version).
+
+    Handles both numpy arrays (from tokenizer fallback) and MLX arrays
+    by converting numpy inputs to MLX before processing.
+    """
     import mlx.core as mx
+
+    # Convert numpy inputs to MLX (tokenizer may return numpy when mlx
+    # return_tensors is not supported)
+    if not hasattr(hidden_states, "to_numpy"):  # not an MLX array
+        hidden_states = mx.array(hidden_states)
+
+    if attention_mask is not None and not hasattr(attention_mask, "to_numpy"):
+        attention_mask = mx.array(attention_mask)
 
     if attention_mask is None:
         pooled = mx.mean(hidden_states, axis=1)

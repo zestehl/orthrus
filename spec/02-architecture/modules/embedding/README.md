@@ -86,8 +86,15 @@ class TransformersBackend(EmbeddingBackend): ...  # GPU when available
 - `src/orthrus/embedding/_worker.py` — EmbeddingWorker (async batch processing)
 
 **Status:**
-- `TransformersBackend` — implemented
-- `OnnxBackend` — **implemented** (`src/orthrus/embedding/_onnx.py`)
-- `MLXBackend` — **implemented** (`src/orthrus/embedding/_mlx.py`)
+- `TransformersBackend` — implemented (CPU/GPU, PyTorch)
+- `OnnxBackend` — **implemented** (CPU/CoreML int8 quantized)
+- `MLXBackend` — **implemented** (Apple Silicon GPU fp16)
+- Tests: `tests/embedding/` — test_transformers.py, test_onnx.py, test_mlx.py, test_worker.py
 
-**Tests:** `tests/embedding/` exists with test_transformers.py, test_worker.py
+**Profile mapping:**
+| Profile | Backend | Batch | Memory | Latency |
+|---------|---------|-------|--------|---------|
+| minimal | None | N/A | 0 | N/A |
+| standard | TransformersBackend (fp32, CPU/GPU) | 32 | <500MB | 20ms/query |
+| performance | OnnxBackend (int8, CPU/CoreML) | 32 | <200MB | 50ms/query |
+| (Apple Silicon) | MLXBackend (fp16, GPU) | 32 | <2GB | 5ms/query |
