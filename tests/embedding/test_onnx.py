@@ -55,7 +55,7 @@ class TestOnnxBackend:
         onnx_module._ort_model = None
         onnx_module._tokenizer = None
 
-        def fake_load(name, path, provider):
+        def fake_load(name, path, provider, quantize=False):
             return model, tokenizer
 
         with patch.object(onnx_module, "_load_onnx_model", fake_load):
@@ -86,7 +86,7 @@ class TestOnnxBackend:
         onnx_module._ort_model = None
         onnx_module._tokenizer = None
 
-        def fake_load(name, path, provider):
+        def fake_load(name, path, provider, quantize=False):
             return model, tokenizer
 
         with patch.object(onnx_module, "_load_onnx_model", fake_load):
@@ -108,7 +108,7 @@ class TestOnnxBackend:
         onnx_module._ort_model = None
         onnx_module._tokenizer = None
 
-        def fake_load(name, path, provider):
+        def fake_load(name, path, provider, quantize=False):
             return model, tokenizer
 
         with patch.object(onnx_module, "_load_onnx_model", fake_load):
@@ -126,7 +126,7 @@ class TestOnnxBackend:
         onnx_module._ort_model = None
         onnx_module._tokenizer = None
 
-        def fake_load(name, path, provider):
+        def fake_load(name, path, provider, quantize=False):
             return model, tokenizer
 
         with patch.object(onnx_module, "_load_onnx_model", fake_load):
@@ -194,7 +194,7 @@ class TestOnnxBackendAsync:
         onnx_module._ort_model = None
         onnx_module._tokenizer = None
 
-        def fake_load(name, path, provider):
+        def fake_load(name, path, provider, quantize=False):
             return model, tokenizer
 
         with patch.object(onnx_module, "_load_onnx_model", fake_load):
