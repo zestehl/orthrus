@@ -1,8 +1,10 @@
 # Module: storage
 
 ---
-status: not-started
+status: implemented
 priority: P0
+implemented: 2026-04-08
+tested: 57/57 tests passing
 ---
 
 ## Responsibility
@@ -81,3 +83,16 @@ class StorageManager:
 - Unit: Parquet round-trip, compression ratios
 - Integration: Rotation with large datasets
 - Property: All writes are durable (fsync verified)
+
+## File Structure
+
+```
+src/orthrus/storage/
+├── __init__.py          # Public exports (StorageManager, TurnRecord, RotationResult)
+├── _manager.py          # StorageManager (426 lines)
+├── _parquet.py          # ParquetWriter, TurnRecord conversion (276 lines)
+├── _jsonl.py            # JSONLWriter (193 lines)
+├── _manifest.py         # Manifest tracking + integrity verification (199 lines)
+├── _rotation.py         # Hot/warm/archive rotation policy (243 lines)
+└── _paths.py            # Time-partitioned path resolution (134 lines)
+```

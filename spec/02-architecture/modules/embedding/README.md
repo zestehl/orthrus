@@ -1,7 +1,7 @@
 # Module: embedding
 
 ---
-status: not-started
+status: in-progress
 priority: P1
 ---
 

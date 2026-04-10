@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-import os
-import tempfile
 from pathlib import Path
 
 import pytest
 import yaml
+from pydantic import ValidationError as PydanticValidationError
 
 from orthrus.config._models import (
     CaptureConfig,
@@ -18,18 +17,14 @@ from orthrus.config._models import (
     ResourceProfile,
     SearchConfig,
     StorageConfig,
-    SyncConfig,
     SyncTarget,
     load_config,
 )
-from pydantic import ValidationError as PydanticValidationError
 from orthrus.config._paths import (
-    OrthrusDirs,
     default_config_path,
     default_config_search_paths,
     orthrus_dirs,
 )
-
 
 # ---------------------------------------------------------------------------
 # Helpers

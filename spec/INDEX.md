@@ -2,7 +2,7 @@
 
 Complete list of specification documents and their status.
 
-**Last Updated:** 2026-04-09
+**Last Updated:** 2026-04-10 (CLI)
 
 ---
 
@@ -17,10 +17,10 @@ Complete list of specification documents and their status.
 
 | Module | Document | Status | Priority |
 |--------|----------|--------|----------|
-| capture | [modules/capture/README.md](02-architecture/modules/capture/README.md) | draft | P0 |
-| storage | [modules/storage/README.md](02-architecture/modules/storage/README.md) | draft | P0 |
-| config | [modules/config/README.md](02-architecture/modules/config/README.md) | draft | P0 |
-| cli | [modules/cli/README.md](02-architecture/modules/cli/README.md) | draft | P0 |
+| capture | [modules/capture/README.md](02-architecture/modules/capture/README.md) | implemented | P0 |
+| storage | [modules/storage/README.md](02-architecture/modules/storage/README.md) | implemented | P0 |
+| config | [modules/config/README.md](02-architecture/modules/config/README.md) | implemented | P0 |
+| cli | [modules/cli/README.md](02-architecture/modules/cli/README.md) | implemented | P0 |
 | embedding | [modules/embedding/README.md](02-architecture/modules/embedding/README.md) | draft | P1 |
 | search | [modules/search/README.md](02-architecture/modules/search/README.md) | draft | P1 |
 | export | [modules/export/README.md](02-architecture/modules/export/README.md) | draft | P1 |

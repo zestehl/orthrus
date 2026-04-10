@@ -28,8 +28,12 @@ dependencies = [
     "pydantic-settings==2.9.1",
     "structlog==25.3.0",
     "rich==14.0.0",
+    "typer==0.24.1",
     "psutil==7.0.0",
     "platformdirs==4.2.0",
+    "pyarrow==19.0.1",
+    "zstandard==0.23.0",
+    "sentence-transformers==4.1.0",
 ]
 
 # Hermes agent is provided by the host environment or installed separately
@@ -50,7 +54,7 @@ dev = [
 ]
 
 [project.scripts]
-orthrus = "orthrus.cli:main"
+orthrus = "orthrus.cli:main_cli"
 orthrus-setup = "orthrus.setup:main"
 orthrus-audit = "orthrus.orthrus_audit:main"
 
@@ -112,6 +116,10 @@ warn_unused_configs = true
 warn_redundant_casts = true
 warn_unused_ignores = true
 show_error_codes = true
+ignore_missing_imports = true
+
+# NOTE: tests/ is excluded from mypy strict checking — pytest handles type
+# verification separately. Run `uv run mypy src/` for strict type coverage.
 
 # === PYTEST CONFIGURATION ===
 [tool.pytest.ini_options]

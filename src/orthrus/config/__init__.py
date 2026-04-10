@@ -3,6 +3,7 @@
 from orthrus.config._models import (
     CaptureConfig,
     Config,
+    ConfigFileNotFoundError,
     EmbeddingConfig,
     ResourceProfile,
     SearchConfig,
@@ -27,6 +28,7 @@ __all__ = [
     "SyncTarget",
     "ResourceProfile",
     "load_config",
+    "ConfigFileNotFoundError",
     "orthrus_dirs",
     "default_config_path",
     "default_config_search_paths",

@@ -1,17 +1,22 @@
-"""Orthrus CLI — Entry point for the Orthrus monitoring system."""
+"""Orthrus CLI — Entry point for the orthrus command-line interface.
+
+Installed via pyproject.toml as the `orthrus` command.
+"""
+
+from __future__ import annotations
 
 import sys
 
 
 def main() -> int:
-    """Main entry point for Orthrus CLI."""
-    try:
-        from orthrus.legacy.cli import main as legacy_main  # type: ignore[import-untyped]
+    """Entry point for the `orthrus` CLI (installed via pyproject.toml)."""
+    from orthrus.cli import main_cli
 
-        return legacy_main()  # type: ignore[no-any-return]
-    except ImportError:
-        print("Orthrus CLI not yet fully implemented.", file=sys.stderr)
-        return 1
+    try:
+        return main_cli()
+    except KeyboardInterrupt:
+        print("Interrupted.", file=sys.stderr)
+        return 130
 
 
 if __name__ == "__main__":

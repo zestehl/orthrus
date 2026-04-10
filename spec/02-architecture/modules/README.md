@@ -92,7 +92,7 @@ Unit, integration, property-based tests.
 | Module | Spec Status | Priority | Description |
 |--------|-------------|----------|-------------|
 | config | draft | P0 | Configuration loading, validation, profiles |
-| capture | draft | P0 | Turn capture, ingest queue, validation |
+| capture | in-progress | P0 | Turn capture, ingest queue, async pipeline |
 | storage | draft | P0 | Parquet/JSONL writing, rotation, compression |
 | embedding | draft | P1 | Async embedding generation, pluggable backends |
 | search | draft | P1 | Text and vector search, index management |

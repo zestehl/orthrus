@@ -6,7 +6,7 @@ import sys
 def main() -> int:
     """Setup entry point."""
     try:
-        from orthrus.legacy.setup import main as legacy_main  # type: ignore[import-untyped]
+        from orthrus.legacy.setup import main as legacy_main
 
         return legacy_main()  # type: ignore[no-any-return]
     except ImportError:

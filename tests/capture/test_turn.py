@@ -3,13 +3,11 @@
 The Turn is the atomic unit of agent telemetry. Immutable, validated at construction.
 """
 
-import math
-import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime, timezone
 
 import pytest
 
-from orthrus.capture.turn import Turn, ToolCall, TurnOutcome
+from orthrus.capture.turn import ToolCall, Turn, TurnOutcome
 
 
 class TestToolCall:
@@ -97,14 +95,14 @@ class TestTurn:
     @pytest.fixture
     def minimal_turn_kwargs(self):
         """Minimal valid kwargs for Turn construction."""
-        return dict(
-            trace_id="018f1234-5678-7abc-8def-0123456789ab",
-            session_id="session-001",
-            timestamp=datetime(2026, 4, 9, 20, 0, 0, tzinfo=timezone.utc),
-            query_text="move to the directory",
-            context_hash="a" * 64,
-            available_tools=["terminal", "file"],
-        )
+        return {
+            "trace_id": "018f1234-5678-7abc-8def-0123456789ab",
+            "session_id": "session-001",
+            "timestamp": datetime(2026, 4, 9, 20, 0, 0, tzinfo=UTC),
+            "query_text": "move to the directory",
+            "context_hash": "a" * 64,
+            "available_tools": ["terminal", "file"],
+        }
 
     def test_minimal_construction(self, minimal_turn_kwargs):
         """Turn with minimum required fields."""
@@ -149,7 +147,7 @@ class TestTurn:
         turn = Turn(**minimal_turn_kwargs)
         assert "\x00" not in turn.query_text
         assert "\x01" not in turn.query_text
-        assert "helloworldtest" == turn.query_text
+        assert turn.query_text == "helloworldtest"
 
     def test_tabs_newlines_preserved(self, minimal_turn_kwargs):
         """\\t, \\n, \\r must be preserved in query_text."""
@@ -179,7 +177,7 @@ class TestTurn:
         turn = Turn(**minimal_turn_kwargs)
         # 15:00 EST = 20:00 UTC
         assert turn.timestamp.hour == 20
-        assert turn.timestamp.tzinfo == timezone.utc
+        assert turn.timestamp.tzinfo == UTC
 
     def test_negative_duration_rejected(self, minimal_turn_kwargs):
         """duration_ms cannot be negative."""
