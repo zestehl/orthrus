@@ -1,7 +1,7 @@
 # Module: embedding
 
 ---
-status: in-progress
+status: implemented
 priority: P1
 ---
 
@@ -87,7 +87,7 @@ class TransformersBackend(EmbeddingBackend): ...  # GPU when available
 
 **Status:**
 - `TransformersBackend` — implemented
-- `OnnxBackend` — **NOT YET IMPLEMENTED** (CPU quantized per spec)
-- `MLXBackend` — **NOT YET IMPLEMENTED** (Apple Silicon GPU)
+- `OnnxBackend` — **implemented** (`src/orthrus/embedding/_onnx.py`)
+- `MLXBackend` — **implemented** (`src/orthrus/embedding/_mlx.py`)
 
 **Tests:** `tests/embedding/` exists with test_transformers.py, test_worker.py

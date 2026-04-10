@@ -85,6 +85,19 @@ dev = [
     "faker==37.4.0",
     "pre-commit==4.2.0",
 ]
+# Optional: ONNX Runtime backend for CPU/CoreML inference
+# Install: uv sync --group onnx
+# Works alongside sentence-transformers (default).
+onnx = [
+    "optimum[onnxruntime]==2.1.0",
+    "onnxruntime==1.24.4",
+    "onnx==1.21.0",
+]
+# Optional: MLX backend for Apple Silicon GPU (fp16)
+# Install separately (uv sync --group mlx is NOT supported due to
+# transformers version conflict; see docs/embedding-backends.md).
+# Manual install: uv pip install mlx mlx-lm
+mlx = []
 
 # === RUFF CONFIGURATION ===
 [tool.ruff]
