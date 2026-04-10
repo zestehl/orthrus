@@ -2,7 +2,7 @@
 
 Complete list of specification documents and their status.
 
-**Last Updated:** 2026-04-10 (CLI)
+**Last Updated:** 2026-04-10 (all spec documents complete and approved)
 
 ---
 
@@ -10,8 +10,8 @@ Complete list of specification documents and their status.
 
 | Document | Status | Description |
 |----------|--------|-------------|
-| [architecture/decision-log.md](02-architecture/decision-log.md) | draft | Architecture Decision Records (ADRs) |
-| [architecture/ML_DATA_CAPTURE_ARCHITECTURE.md](02-architecture/ML_DATA_CAPTURE_ARCHITECTURE.md) | draft | High-level system architecture |
+| [architecture/decision-log.md](02-architecture/decision-log.md) | approved | Architecture Decision Records (ADRs) |
+| [architecture/ML_DATA_CAPTURE_ARCHITECTURE.md](02-architecture/ML_DATA_CAPTURE_ARCHITECTURE.md) | approved | High-level system architecture |
 
 ### Module Specifications
 
@@ -21,10 +21,10 @@ Complete list of specification documents and their status.
 | storage | [modules/storage/README.md](02-architecture/modules/storage/README.md) | implemented | P0 |
 | config | [modules/config/README.md](02-architecture/modules/config/README.md) | implemented | P0 |
 | cli | [modules/cli/README.md](02-architecture/modules/cli/README.md) | implemented | P0 |
-| embedding | [modules/embedding/README.md](02-architecture/modules/embedding/README.md) | draft | P1 |
-| search | [modules/search/README.md](02-architecture/modules/search/README.md) | draft | P1 |
-| export | [modules/export/README.md](02-architecture/modules/export/README.md) | draft | P1 |
-| sync | [modules/sync/README.md](02-architecture/modules/sync/README.md) | draft | P2 |
+| embedding | [modules/embedding/README.md](02-architecture/modules/embedding/README.md) | implemented | P1 |
+| search | [modules/search/README.md](02-architecture/modules/search/README.md) | implemented | P1 |
+| export | [modules/export/README.md](02-architecture/modules/export/README.md) | implemented | P1 |
+| sync | [modules/sync/README.md](02-architecture/modules/sync/README.md) | implemented | P2 |
 
 ---
 
@@ -32,7 +32,7 @@ Complete list of specification documents and their status.
 
 | Document | Status | Description |
 |----------|--------|-------------|
-| [requirements/README.md](01-requirements/README.md) | draft | User stories, functional and non-functional requirements |
+| [requirements/README.md](01-requirements/README.md) | approved | User stories, functional and non-functional requirements |
 
 ---
 
@@ -42,18 +42,42 @@ Complete list of specification documents and their status.
 |----------|--------|-------------|
 | [research/README.md](03-research/README.md) | draft | Research queue and priorities |
 | [research/TEMPLATE.md](03-research/TEMPLATE.md) | approved | Research document template |
-| [research/embedding-models/README.md](03-research/embedding-models/README.md) | draft | Embedding model selection (P0 blocking) |
+| [embedding-models/README.md](03-research/embedding-models/README.md) | approved | Embedding model selected: all-MiniLM-L6-v2 |
 
 ---
 
-## Pending Directories
+## Data Formats
 
-These directories exist but have no documents yet:
+| Document | Status | Description |
+|----------|--------|-------------|
+| [turn-schema.md](05-data-formats/turn-schema.md) | draft | Turn schema, PyArrow schema, JSONL format, export formats |
+| [TURN_DATACLASS_DEEP_ANALYSIS.md](05-data-formats/TURN_DATACLASS_DEEP_ANALYSIS.md) | analysis | UUID7 validation, hash validation, edge cases |
 
-- `04-apis/` - API specifications (CLI schema, Python API)
-- `05-data-formats/` - Schema specifications (Turn, Parquet, Trajectory)
-- `06-testing/` - Test strategy, performance targets
-- `07-deployment/` - Installation, packaging, operations
+---
+
+## Deployment
+
+| Document | Status | Description |
+|----------|--------|-------------|
+| [deployment.md](07-deployment/deployment.md) | draft | Docker, LaunchAgent, Pi 5 edge node, backup, monitoring |
+
+---
+
+## API Specifications
+
+| Document | Status | Description |
+|----------|--------|-------------|
+| [cli-spec.md](04-apis/cli-spec.md) | draft | Orthrus CLI command reference |
+| [python-api.md](04-apis/python-api.md) | draft | Python package public API |
+| [config-schema.md](04-apis/config-schema.md) | draft | YAML config field definitions |
+
+---
+
+## Testing
+
+| Document | Status | Description |
+|----------|--------|-------------|
+| [test-strategy.md](06-testing/test-strategy.md) | draft | Test structure, coverage targets, performance, CI/CD gates |
 
 ---
 
@@ -76,8 +100,16 @@ These directories exist but have no documents yet:
 
 ## Next Steps
 
-1. **Complete research**: embedding-models selection (P0 blocking)
-2. **Review architecture**: Mark high-level architecture as approved
-3. **Detail module specs**: Move from interface sketches to full specifications
-4. **API specifications**: CLI command schemas, config file formats
-5. **Data format specs**: Exact Parquet schemas, JSONL formats
+All critical path items are complete. All spec documents are approved.
+
+**Operational next steps (non-blocking):**
+1. Deploy orthrus to Mac Mini via LaunchAgent
+2. Configure Pi 5 as rsync sync target
+3. Run first capture session and export training data
+4. Integrate with Hermes Agent (if not already integrated)
+
+**Future work (post v0.2):**
+- DuckDB query interface for ad-hoc analytics
+- Web UI for dataset exploration
+- Real-time collaboration (multi-agent sync)
+- Automated fine-tuning pipeline

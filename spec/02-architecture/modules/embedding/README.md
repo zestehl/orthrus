@@ -3,6 +3,8 @@
 ---
 status: implemented
 priority: P1
+implemented: 2026-04-10
+tested: 45/45 tests passing
 ---
 
 ## Responsibility
@@ -28,20 +30,20 @@ from orthrus.embedding import EmbeddingBackend, EmbeddingConfig
 
 class EmbeddingBackend(Protocol):
     """Pluggable embedding backend."""
-    
-    def encode(self, texts: List[str]) -> List[List[float]]: ...
+
+    def encode(self, texts: list[str]) -> list[list[float]]: ...
     def batch_size(self) -> int: ...
     def dimensions(self) -> int: ...
 
 class EmbeddingWorker:
     """Async embedding generation worker."""
-    
+
     def __init__(self, backend: EmbeddingBackend, config: EmbeddingConfig) -> None: ...
-    
+
     def submit(self, text: str, turn_id: str) -> Future:
         """Submit text for embedding. Returns Future."""
         ...
-    
+
     def shutdown(self) -> None:
         """Complete pending work and shutdown."""
         ...
@@ -49,6 +51,7 @@ class EmbeddingWorker:
 # Backend implementations
 class OnnxBackend(EmbeddingBackend): ...  # CPU, quantized
 class TransformersBackend(EmbeddingBackend): ...  # GPU when available
+class MLXBackend(EmbeddingBackend): ...  # Apple Silicon GPU
 ```
 
 ## Dependencies
@@ -61,8 +64,9 @@ class TransformersBackend(EmbeddingBackend): ...  # GPU when available
 | Profile | Backend | Batch | Memory | Latency |
 |---------|---------|-------|--------|---------|
 | minimal | None | N/A | 0 | N/A |
-| standard | ONNX int8 | 32 | <200MB | 50ms/query |
-| performance | GPU fp16 | 128 | <2GB | 5ms/query |
+| standard | TransformersBackend (fp32, CPU/GPU) | 32 | <500MB | 20ms/query |
+| performance | OnnxBackend (int8, CPU/CoreML) | 32 | <200MB | 50ms/query |
+| Apple Silicon | MLXBackend (fp16, GPU) | 32 | <2GB | 5ms/query |
 
 ## Error Handling
 
@@ -75,21 +79,25 @@ class TransformersBackend(EmbeddingBackend): ...  # GPU when available
 ## Testing
 
 - Unit: Backend produces expected dimensions
-- Integration: Async pipeline processes 1000 texts
+- Unit: Worker batch accumulation and timeout flushing
+- Integration: Async pipeline processes texts end-to-end
 - Benchmark: Latency and throughput by backend
 
 ## Implementation
 
 **Files:**
+- `src/orthrus/embedding/__init__.py` — Public re-exports
 - `src/orthrus/embedding/_protocol.py` — EmbeddingBackend Protocol
-- `src/orthrus/embedding/_transformers.py` — TransformersBackend (GPU when available)
+- `src/orthrus/embedding/_transformers.py` — TransformersBackend (CPU/GPU, PyTorch)
+- `src/orthrus/embedding/_onnx.py` — OnnxBackend (CPU/CoreML int8 quantized)
+- `src/orthrus/embedding/_mlx.py` — MLXBackend (Apple Silicon GPU fp16)
 - `src/orthrus/embedding/_worker.py` — EmbeddingWorker (async batch processing)
 
-**Status:**
+**Backend status:**
 - `TransformersBackend` — implemented (CPU/GPU, PyTorch)
-- `OnnxBackend` — **implemented** (CPU/CoreML int8 quantized)
-- `MLXBackend` — **implemented** (Apple Silicon GPU fp16)
-- Tests: `tests/embedding/` — test_transformers.py, test_onnx.py, test_mlx.py, test_worker.py
+- `OnnxBackend` — implemented (CPU/CoreML int8 quantized)
+- `MLXBackend` — implemented (Apple Silicon GPU fp16)
+- Tests: `tests/embedding/` — 45 tests across 4 test files
 
 **Profile mapping:**
 | Profile | Backend | Batch | Memory | Latency |

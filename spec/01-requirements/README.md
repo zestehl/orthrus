@@ -76,9 +76,7 @@ What Orthrus must do, and what constraints it must operate within.
 
 ---
 
-## Status
-
-This document is **draft** and incomplete. Requirements need review and prioritization.
+**Status:** Approved — all functional and non-functional requirements implemented across 8 modules.
 
 ---
 

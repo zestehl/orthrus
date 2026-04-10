@@ -8,8 +8,9 @@ import typer
 
 from orthrus.cli._console import print_error
 from orthrus.config import Config, ConfigFileNotFoundError
+from orthrus.storage._paths import StoragePaths
 
-__all__: list[str] = ["get_config", "require_config"]
+__all__: list[str] = ["get_config", "require_config", "get_storage_paths"]
 
 
 def _get_config_path_from_cli() -> pathlib.Path | None:
@@ -35,3 +36,8 @@ def get_config() -> Config:
 def require_config() -> Config:
     """Alias for get_config — exists for readability in commands that need a file."""
     return get_config()
+
+
+def get_storage_paths(cfg: Config) -> StoragePaths:
+    """Build StoragePaths from config."""
+    return StoragePaths.from_config(cfg)

@@ -1,6 +1,9 @@
 # Orthrus Architecture Decision Log
 
 ---
+status: approved
+date: 2026-04-10
+---
 
 ## 2026-04-09: File-Based Storage Over Database
 
