@@ -29,7 +29,8 @@ class _VectorMatch:
 def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
     """Compute cosine similarity between two vectors.
 
-    Returns a float in [0.0, 1.0] where 1.0 is identical direction.
+    Returns a float in [-1.0, 1.0] where 1.0 is identical direction,
+    0.0 is orthogonal, and -1.0 is opposite.
     """
     norm_a = np.linalg.norm(a)
     norm_b = np.linalg.norm(b)

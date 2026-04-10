@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -106,15 +107,21 @@ def text_search(
 def _passes_filters(row: dict[str, object], filters: dict[str, object]) -> bool:
     """Check if a row passes all filters."""
     for field, expected in filters.items():
-        value = row.get(field)
+        if field not in row:
+            # Unknown filter field — ignore (pass through)
+            continue
+
+        value = row[field]
 
         if isinstance(expected, str) and isinstance(value, str):
             # String containment match for string filters
             if expected.lower() not in value.lower():
                 return False
         elif isinstance(expected, (list, tuple)) and hasattr(expected, "__iter__"):
-            # Membership check
-            if value not in expected:
+            # Membership check — any element of expected must be in value
+            # value is a tuple/list (stored in parquet), cast for mypy
+            value_seq: Sequence[object] = value  # type: ignore[assignment]
+            if not any(item in value_seq for item in expected if item is not None):
                 return False
         else:
             # Direct equality
